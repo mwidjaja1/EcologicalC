@@ -13,38 +13,54 @@
  **		gcc -L/opt/local/lib rk4gsl.c -lgsl -lgslcblas -lm -std=c99
  **
  ** This code consists of four functions:
- **	Func A	Equations	This GSL-mandated function creates the ODE functions
- **						with the user-specified constants for solving.
- **	Func B	Jacobson	This GSL-mandated function is a placeholder because
- **						the RK45 solver being utilized does not require this.
- **	Func C	ODE Pass	This function takes the variables of Func D & passes
- **						it to Func A and works with Func A to solve the ODEs.
- **						This function then passes the results back to Func D.
- **	Func D	Main		This function is the primary program of this script.
- **						The user selects how they want to test the ODEs here &
- **						the proper modifications for those queries are made.
+ **		Func A	Equations	This GSL-mandated function creates the ODE functions
+ **							with the user-specified constants for solving.
+ **		Func B	Jacobson	This GSL-mandated function is a placeholder because
+ **							the RK45 solver being used does not require this.
+ **		Func C	ODE Pass	This function takes the variables of Func D & sends
+ **							it to Func A & works with it to solve the ODEs.
+ **							Func C then passes those results back to Func D.
+ **		Func D	Main		This function is the backbone of this script. The
+ **							user selects how they want to test the ODEs here &
+ **							Func D makes the modifications for the chosen query.
  **
  ** The globally defined variables & parameters (used in Func A, C, & D) are:
- **	maxNode	const int	States the max amount of nodes present
- **	fixQty	int			States the amount of fixed nodes
- **	fixEqu	int			Makes a [maxNode] sized array to identify fixed nodes
- **	svFile	File		Stores all Y & T values if requested in Func D.
+ **		maxNode		const int	States the max amount of nodes present
+ **		fixQty		int			States the amount of fixed nodes
+ **		fixEqu		int			A [maxNode] sized array to state fixed nodes
+ **		svFile		File		Stores all Y & T values if requested in Func D.
  **
  ** These variables might have to be modified prior to running the model:
- **	maxNode		In Global	States the max amount of nodes present
- **	steadyValP	In Func A	Final steady-state values expected
- **	oldAlpha	In Func A	The old Alpha Values
- **	maxTime		In Func D	The max time the ODE Solver should calculate for
+ **		maxNode		In Global	States the max amount of nodes present
+ **		steadyValP	In Func A	Final steady-state values expected
+ **		oldAlpha	In Func A	The old Alpha Values
+ **		maxTime		In Func D	The max time the ODE Solver should solve for
  **
  ** Unless otherwise specified in Func D, all output data is stored in:
- **	outFile		In Func D	This file stores the last set of each run's data.
- **	odeResult	In Func C	This [maxNode+1] sized array stores the last set
- **							of each run's data.
- **	sumResult	In Func D	This [maxRun][maxNode+1] sized array stores the
- **							the last set of data from every run. The script
- **							automatically builds this, if deemed necessary.
- **	svFile		In Func C	This file stores all Y & T values from each run.
- **							This is optional: User selects this in Func D.2.
+ **		outFile		In Func D	This file stores the last set of each run's data
+ **		odeResult	In Func C	This [maxNode+1] sized array stores the last set
+ **								of each run's data.
+ **		sumResult	In Func D	This [maxRun][maxNode+1] sized array stores the
+ **								the last set of data from every run. The script
+ **								automatically builds this, if deemed necessary.
+ **		svFile		In Func C	This file stores all Y & T values from each run.
+ **								This is optional: User selects this in Func D.2.
+ **
+ ** This code can solve 8 Nodes. To increase the qty of Nodes, one must change:
+ **		Line 65			Change the '#define maxNode 8' to the proper value.
+ **		Line 109-111	Add additional Steady State data per each node.
+ **		Line 114-122	Add additional Old Alpha data per each node.
+ **		Line 236-237	Add additional %f flags to print the additional data.
+ **		Line 242-243	Add additional %f flags to print the additional data.
+ **		Line 310		Add additional initial values for each node.
+ **		Line 321		Add additional entries for the output file's header.
+ **		Line 411-417	Add additional %f flags to print the additional data*.
+ **		Line 462-467	Add additional %f flags to print the additional data*.
+ **		Line 519-524	Add additional %f flags to print the additional data*.
+ **		Line 587-592	Add additional %f flags to print the additional data*.
+ **		Line 670-675	Add additional %f flags to print the additional data*.
+ **			* Note for these entries, there is [maxNode + 1] values that must
+ **			be stated because these outputs print the final results & the time.
  ** ------------------------------------------------------------------------- */
 
 
@@ -72,34 +88,35 @@ FILE* svFile;
  **	as global commands. These are: maxNode, fixQty, and fixEqu.
  **
  ** The parameters & variables for this include:
- **	newAlpha	double	A [maxNode] x [maxNode] sized array to hold the new
- **						alpha values that this function will later produce.
- **	constR		double	A [maxNode] sized array to hold the constant values
- **						that this function will later create.
- **	steadyValP	double	A [maxNode] sized array with the steady state values
- **						each node should reach at the end of this model.
- **	oldAlpha	double	A [maxNode] x [maxNode] sized array w. old alpha
- **						values. This is the unified birth & death rates.
+ **		newAlpha	double	A [maxNode] x [maxNode] sized array to hold the new
+ **							alpha values that this function will later produce.
+ **		constR		double	A [maxNode] sized array to hold the constant values
+ **							that this function will later create.
+ **		steadyValP	double	A [maxNode] sized array with the steady state values
+ **							each node should reach at the end of this model.
+ **		oldAlpha	double	A [maxNode] x [maxNode] sized array w. old alpha
+ **							values. This is the unified birth & death rates.
  **
  ** The Algorithm used for this function is:
- **	1. Declare all of the parameters & variables aforementioned.
- **	2. Designate a forLoop to create the newAlpha values & constR values.
- **	3. Specify the Differential Equations using the values obtained in A.2.
- **	3A. Checks if a node was fixed (as determined by Func D) and if so, does
- **		not make its function.
- **	3B. If 3A was not true, then the Node's Rates & Function are created.
+ **		1. Declare all of the parameters & variables aforementioned.
+ **		2. Designate a forLoop to create the newAlpha values & constR values.
+ **		3. Specify the Differential Equations using the values obtained in A.2.
+ **		3A. Checks if a node was fixed (as determined by Func D) & if so, does
+ **			not make its function.
+ **		3B. If 3A was not true, then the Node's Rates & Function are created.
  ** ------------------------------------------------------------------------- */
 int func (double t, const double y[], double f[], void* params)
 {
 	
 	// --- Step A.1: Declare the Parameters & Variables ------------------------
-	double newAlpha[maxNode][maxNode] = {
-		{0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0}, {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0},
-		{0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0}, {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0},
-		{0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0}, {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0},
-		{0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0}, {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0},
-	};
-	double constR[maxNode] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+	double newAlpha[maxNode][maxNode], constR[maxNode];
+	
+	for (int i1=0; i1<maxNode; i1++) {
+		constR[i1] = 0.0;		// Makes a constR[maxNode] sized array of zeros
+		for (int i2=0; i2<maxNode; i2++) {
+			newAlpha[i1][i2] = 0.0;		// Makes a newAlpha array of zeros
+		}
+	}
 	
 	double steadyValP[maxNode] = {
 		38.8089080995067, 43.5963099130963, 39.4611963199623, 27.6303237065429,
@@ -168,27 +185,28 @@ int jac ()
  **
  ** These parameters & variables needed for this function are declared in
  ** Func D (the Main Function) and are linked to this one. They include:
- **	t			double		The initial time.
- **	t1			double		The final time (when the model should stop).
- **	maxTime		double		This should be the same value as 't1'.
- **	y			double		The [maxNode] sized array which holds final results.
- **	intRun		int			Tracks how often the ODE Solver was ran.
+ **		t			double		The initial time.
+ **		t1			double		The final time (when the model should stop).
+ **		maxTime		double		This should be the same value as 't1'.
+ **		y			double		The [maxNode] sized array which holds final
+ **								results. It gets written over after each run.
+ **		intRun		int			Tracks how often the ODE Solver was ran.
  **
  ** If svInt = 2 (as documented in Func D), the following variables are used:
- **	svBuffer	char[25]	Creates the file name for each output file made.
- **	svFile		FILE		Declared globally, this is the file that is used.
+ **		svBuffer	char[25]	Makes the file name for each output file made.
+ **		svFile		FILE		Declared globally, this is the file that's used.
  **
  ** The Algorithm used for this function is:
- **	1. We first declare the ODE system & the ODE driver which GSL requires.
- **	2. If svInt = 2 (ie. the user wanted all data posted on the terminal &
- **    saved to a file), each run's output file is created here.
- **	3. A forLoop is used to state how frequently the results should be saved.
- **		3A. The stepsize is calculated
- **		3B. The ODE solver is ran
- **		3C. (If svInt = 1 or 2) The results are displayed to the terminal.
- **		3D. (If svInt = 2) The results are saved to the output file
- **	4. The final results are saved to an array which is linked to Func D.
- **	   The ODE solver is then shut down & (if svInt = 2) svFile is saved.
+ **		1. We first declare the ODE system & the ODE driver which GSL requires.
+ **		2. If svInt = 2 (ie. the user wanted all data posted on the terminal &
+ **			saved to a file), each run's output file is created here.
+ **		3. A forLoop is set to state how frequently the results should be saved.
+ **			3A. The stepsize is calculated
+ **			3B. The ODE solver is ran
+ **			3C. (If svInt = 1 or 2) The results are displayed to the terminal.
+ **			3D. (If svInt = 2) The results are saved to the output file
+ **		4. The final results are saved to an array which is linked to Func D.
+ **			The ODE solver is then shut down & (if svInt = 2) svFile is saved.
  ** ------------------------------------------------------------------------- */
 double odePass (double t, double t1, double maxTime, double y[], int intRun,
 					 double odeResult[], int svInt) {
@@ -224,7 +242,7 @@ double odePass (double t, double t1, double maxTime, double y[], int intRun,
 		if (svInt==1 || svInt == 2) {
 		// --- Step C.3C: If svInt = 1 or 2, Displays Results to Terminal ------
 		printf ("\nTime: %f\n",t);
-		printf ("%f\t %f\t %f\t %f\t %f\t %f\t %f\t %f\n",
+		printf ("%f\t %f\t %f\t %f\t %f\t %f\t %f\t %f\t",
 				  y[0], y[1], y[2], y[3], y[4], y[5], y[6], y[7]);
 		}
 		
@@ -264,27 +282,27 @@ double odePass (double t, double t1, double maxTime, double y[], int intRun,
  **
  ** DO NOT MODIFY. These parameters & variables are strictly used in Func D
  ** for all Func D queries:
- **	intMethod	int		Saves the method the user selected in Step D.2.
- **	yInitial	double	A [maxNode] sized array with Y's initial values.
- **	y			double	A [maxNode] sized array with Y's initial values,
- **						after the user modifies its values.
+ **		intMethod	int		Saves the method the user selected in Step D.2.
+ **		yInitial	double	A [maxNode] sized array with Y's initial values.
+ **		y			double	A [maxNode] sized array with Y's initial values,
+ **							after the user modifies its values.
  **
  ** The svInt interger in Step D.2 decides how data is saved. Large svInt =
  ** longer processing times & a greater likelihood of memory crashes.
- **	svInt = 0	Only the last set of data from each run is saved into 
- **				outFile, odeResult, & (if applicable) sumResult.
- **	svInt = 1	svInt=0 applies. Also, all Y & T data from each run will be
- **				displayed on the Terminal Prompt.
- **	svInt = 2	svInt=0 and svInt=1 applies. Also, all Y & T data from each
- **				run will be saved to an output file, as documented in Func C.
+ **		svInt = 0	Only the last set of data from each run is saved into
+ **					outFile, odeResult, & (if applicable) sumResult.
+ **		svInt = 1	svInt=0 applies. Also, all Y & T data from each run will be
+ **					displayed on the Terminal Prompt.
+ **		svInt = 2	svInt=0 & svInt=1 applies. Also, all Y & T data of each run
+ **					will be saved its own output file, as documented in Func C.
  **
  ** The Algorithm used for this function is:
- **	1. We declare the parameters & variables which Functions D (and C) need.
- **	2. We create the output array & file which will store the final set of
- **	   data from every run. (svInt = 0, 1, or 2)
- **	3. The user gets to select how they want data to be saved. (via svInt)
- **	4. The user gets to select a query -- this are options on how data can be
- **	   obtained. (Documentation for these queries are noted before each one).
+ **		1. We declare the parameters & variables which Functions D (and C) need.
+ **		2. We create the output array & file which will store the final set of
+ **			data from every run. (svInt = 0, 1, or 2)
+ **		3. The user gets to select how they want data to be saved. (via svInt)
+ **		4. The user gets to select a query -- these are options on how data can
+ **			be obtained. (Documentation for these queries are noted later on).
  ** ------------------------------------------------------------------------- */
 int main (int argc, char **argv) {
 
@@ -337,10 +355,10 @@ int main (int argc, char **argv) {
 	 ** These Func D defined variables will be used: intRun, outFile, odeResult
 	 **
 	 ** The following parameters & variables will be modified in Query 0:
-	 **	fixVal		User Set	States the value each node should be fixed with.
+	 **		fixVal		User Set	States the value each node is fixed with.
 	 **
 	 ** The following parameter & variables are unique to Query 0:
-	 **	fixNode		User Set	States which nodes should be fixed.
+	 **		fixNode		User Set	States which nodes should be fixed.
 	 ** --------------------------------------------------------------------- */
 	if (intMethod == 0) {
 		// Asks for how many nodes to fix
@@ -380,7 +398,7 @@ int main (int argc, char **argv) {
 	 ** These Func D defined variables will be used: intRun, outFile, odeResult
 	 **
 	 ** The following parameters & variables will be modified in Query 1:
-	 **	fixVal		Script Set		States the value a node will be fixed with.
+	 **		fixVal		User Set	States the value each node is fixed with.
 	 ** --------------------------------------------------------------------- */
 	if (intMethod == 1) {
 		fixQty = 1;		// SKO -- This fixes 1 node at a time
@@ -416,10 +434,10 @@ int main (int argc, char **argv) {
 	 ** These Func D defined variables will be used: intRun, outFile, odeResult
 	 **
 	 ** The following parameters & variables will be modified in Query 2:
-	 **	fixVal	Script Set		States the value a node will be fixed with.
+	 **		fixVal		User Set	States the value each node is fixed with.
 	 **
 	 ** The following parameters & variables are unique to Query 2:
-	 **	maxRun	const int		Specifies the maximum amount of runs possible.
+	 **		maxRun		const int	Specifies the max amount of runs possible.
 	 ** --------------------------------------------------------------------- */
 	if (intMethod == 2) {
 		fixQty = 2;								// DKO -- Fixes 2 nodes at once
@@ -467,10 +485,10 @@ int main (int argc, char **argv) {
 	 ** These Func D defined variables will be used: intRun, outFile, odeResult
 	 **
 	 ** The following parameters & variables will be modified in Query 2:
-	 **	fixVal	Script Set		States the value a node will be fixed with.
+	 **		fixVal		User Set	States the value each node is fixed with.
 	 **
 	 ** The following parameters & variables are unique to Query 2:
-	 **	maxRun	const int		Specifies the maximum amount of runs possible.
+	 **		maxRun		const int	Specifies the max amount of runs possible.
 	 ** --------------------------------------------------------------------- */
 	if (intMethod == 3) {
 		fixQty = 3;		// TKO -- This fixes 3 nodes at a time
@@ -527,21 +545,21 @@ int main (int argc, char **argv) {
 	 **												 odeResult
 	 **
 	 ** The following parameters & variables will be modified in Query 4:
-	 **	fixVal		Script Set	States the value a node will be fixed with.
+	 **		fixVal		User Set	States the value each node is fixed with.
 	 **
 	 ** The following parameters & variables are unique for Query 4:
-	 **	fixNode		User Set		States which nodes should be fixed (in 4B).
-	 **	maxVal		User Set		States the max value the fixed node will
+	 **		fixNode		User Set	States which nodes should be fixed (in 4B).
+	 **		maxVal		User Set	States the max value the fixed node will
 	 **								reach (in 4B).
-	 **	stepSize	User Set		States how often Func C will be ran (in 4C).
+	 **		stepSize	User Set	States how often Func C will be ran (in 4C).
 	 **
 	 ** The Algorithm used for Query 4 is:
-	 **	4A. Creates Parameters & Variables for the code.
-	 **	4B. Asks the users on which node to fix and to what maximum value.
-	 **	4C. Allocates memory for the solutions array.
-	 **	4D. A For-Loop is designated to sweep node 1 from 0 to its max value.
-	 **	4E. A 2nd For-Loop is designated to retrieve steady-state data from
-	 **		Func C and save it to the output file (results.dat).
+	 **		4A. Creates Parameters & Variables for the code.
+	 **		4B. Asks the users on which node to fix and to what maximum value.
+	 **		4C. Allocates memory for the solutions array.
+	 **		4D. A For-Loop is made to sweep node 1 from 0 to its max value.
+	 **		4E. A 2nd For-Loop is designated to retrieve steady-state data from
+	 **			Func C and save it to the output file (results.dat).
 	 ** --------------------------------------------------------------------- */
 	if (intMethod == 4) {
 		// --- Step D.4.4A: Declaring Parameters & Variables -------------------
@@ -593,26 +611,27 @@ int main (int argc, char **argv) {
 	 **												 odeResult
 	 **
 	 ** The following parameters & variables will be modified in Query 5:
-	 **	fixVal		Script Set	States the value a node will be fixed with.
+	 **		fixVal		Script Set	States the value a node will be fixed with.
 	 **
 	 ** The following parameters & variables are unique for Query 5:
-	 **	fixNode		User Set	States which nodes should be fixed.
-	 **	tempVal		User Set	States the max value the fixed node will reach.
-	 **	maxVal		Script Set	A [fixQty] sized array storing the max values
-	 **							all nodes will reach.
-	 **	stepSize	User Set	States how often Func C should be ran.
+	 **		fixNode		User Set	States which nodes should be fixed.
+	 **		tempVal		User Set	States the maximum value the fixed node will
+	 **								reach. (In stepSize increments from 0)
+	 **		maxVal		Script Set	A [fixQty] sized array storing the maximum
+	 **								values all nodes will reach.
+	 **		stepSize	User Set	States how often Func C should be ran.
 	 **
 	 ** The Algorithm used for Query 5 is:
-	 **	5A. Creates Parameters & Variables for the code.
-	 **	5B. Asks the users on which nodes to fix and to what maximum value.
-	 **	5C. Allocates memory for the solutions array. NOTE: If an output file
-	 **		 will be saved for each Y/T value from each run, a large stepSize 
-	 **		 should be selected or the code might crash from excessive memory.
-	 **	5D. A For-Loop is made to sweep node 1 from 0 to its max value.
-	 **	5E. A 2nd For-Loop is made to sweep node 2 from 0 to its max value.
-	 **	5F. A 3rd For-Loop is made to retrieve steady-state data from
-	 **		 Func C and save it to the output file (results.dat).
-	 ** ---------------------------------------------------------------------- */
+	 **		5A. Creates Parameters & Variables for the code.
+	 **		5B. Asks the users on which nodes to fix and to what maximum value.
+	 **		5C. Allocates memory for a solutions array. NOTE: If an output file
+	 **			will be saved for each Y/T value of each run, a large stepSize
+	 **			should be selected or there might be a segmentation fault crash.
+	 **		5D. A For-Loop is made to sweep node 1 from 0 to its max value.
+	 **		5E. A 2nd For-Loop is made to sweep node 2 from 0 to its max value.
+	 **		5F. A 3rd For-Loop is made to retrieve steady-state data from
+	 **			Func C and save it to the output file (results.dat).
+	 ** --------------------------------------------------------------------- */
 	if (intMethod == 5) {
 		// --- Step D.4.5A: Declaring Parameters & Variables -------------------
 		fixQty = 2;		// DKO -- This fixes 2 nodes at a time
@@ -647,7 +666,7 @@ int main (int argc, char **argv) {
 				y[fixEqu[1]] = i2;		// Fixes the Second Node Automatically
 				odePass(t, t1, maxTime, y, intRun, odeResult, svInt);  // Func C
 				
-				// --- Step D.4.5F: Retrieves Data & Outputs to File ---------------
+				// --- Step D.4.5F: Retrieves Data & Outputs to File -----------
 				for (int i3=0; i3<=maxNode+2; i3++)
 					sumResult[intRun][i3] = odeResult[i3];
 				fprintf (outFile,"%f\t %f\t %f\t %f\t %f\t %f\t %f\t %f\t %f\n",
