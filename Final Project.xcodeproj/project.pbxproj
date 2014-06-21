@@ -1,0 +1,412 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34ABEB78183C3319004ADA87 /* rk4gsl.c in Sources */ = {isa = PBXBuildFile; fileRef = 34ABEB77183C3319004ADA87 /* rk4gsl.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		34423F02183FC7E900E458F9 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		34423F0F183FC80900E458F9 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		34ABEB72183C3319004ADA87 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "Users/Matthew/Dropbox/Academics/CPLS/Final\\ Project/Rk4gsl";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		343C541D187A2B9600D69D93 /* rk4gsl_Small.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rk4gsl_Small.txt; path = "../../05 - Results/08.13 - SmallLargeEV/rk4gsl_Small.txt"; sourceTree = "<group>"; };
+		34423F04183FC7E900E458F9 /* rk4stack */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = rk4stack; sourceTree = BUILT_PRODUCTS_DIR; };
+		34423F11183FC80900E458F9 /* rk4web */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = rk4web; sourceTree = BUILT_PRODUCTS_DIR; };
+		34ABEB74183C3319004ADA87 /* Rk4gsl */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Rk4gsl; sourceTree = BUILT_PRODUCTS_DIR; };
+		34ABEB77183C3319004ADA87 /* rk4gsl.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = rk4gsl.c; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		34423F01183FC7E900E458F9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		34423F0E183FC80900E458F9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		34ABEB71183C3319004ADA87 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34ABEB6B183C3319004ADA87 = {
+			isa = PBXGroup;
+			children = (
+				34ABEB76183C3319004ADA87 /* Rk4gsl */,
+				34ABEB75183C3319004ADA87 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		34ABEB75183C3319004ADA87 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34ABEB74183C3319004ADA87 /* Rk4gsl */,
+				34423F04183FC7E900E458F9 /* rk4stack */,
+				34423F11183FC80900E458F9 /* rk4web */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34ABEB76183C3319004ADA87 /* Rk4gsl */ = {
+			isa = PBXGroup;
+			children = (
+				34ABEB77183C3319004ADA87 /* rk4gsl.c */,
+				343C541D187A2B9600D69D93 /* rk4gsl_Small.txt */,
+			);
+			path = Rk4gsl;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34423F03183FC7E900E458F9 /* rk4stack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34423F0A183FC7E900E458F9 /* Build configuration list for PBXNativeTarget "rk4stack" */;
+			buildPhases = (
+				34423F00183FC7E900E458F9 /* Sources */,
+				34423F01183FC7E900E458F9 /* Frameworks */,
+				34423F02183FC7E900E458F9 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = rk4stack;
+			productName = rk4stack;
+			productReference = 34423F04183FC7E900E458F9 /* rk4stack */;
+			productType = "com.apple.product-type.tool";
+		};
+		34423F10183FC80900E458F9 /* rk4web */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34423F17183FC80900E458F9 /* Build configuration list for PBXNativeTarget "rk4web" */;
+			buildPhases = (
+				34423F0D183FC80900E458F9 /* Sources */,
+				34423F0E183FC80900E458F9 /* Frameworks */,
+				34423F0F183FC80900E458F9 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = rk4web;
+			productName = rk4web;
+			productReference = 34423F11183FC80900E458F9 /* rk4web */;
+			productType = "com.apple.product-type.tool";
+		};
+		34ABEB73183C3319004ADA87 /* Rk4gsl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34ABEB7D183C3319004ADA87 /* Build configuration list for PBXNativeTarget "Rk4gsl" */;
+			buildPhases = (
+				34ABEB70183C3319004ADA87 /* Sources */,
+				34ABEB71183C3319004ADA87 /* Frameworks */,
+				34ABEB72183C3319004ADA87 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Rk4gsl;
+			productName = Rk4gsl;
+			productReference = 34ABEB74183C3319004ADA87 /* Rk4gsl */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		34ABEB6C183C3319004ADA87 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = "Matthew Widjaja";
+			};
+			buildConfigurationList = 34ABEB6F183C3319004ADA87 /* Build configuration list for PBXProject "Final Project" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 34ABEB6B183C3319004ADA87;
+			productRefGroup = 34ABEB75183C3319004ADA87 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34ABEB73183C3319004ADA87 /* Rk4gsl */,
+				34423F03183FC7E900E458F9 /* rk4stack */,
+				34423F10183FC80900E458F9 /* rk4web */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34423F00183FC7E900E458F9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		34423F0D183FC80900E458F9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		34ABEB70183C3319004ADA87 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34ABEB78183C3319004ADA87 /* rk4gsl.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		34423F0B183FC7E900E458F9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		34423F0C183FC7E900E458F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		34423F18183FC80900E458F9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		34423F19183FC80900E458F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		34ABEB7B183C3319004ADA87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-L/Users/Matthew/dislin",
+					"-ldislin",
+					"-L/opt/local/lib",
+					"-L/usr/OpenMotif/lib",
+					"-lXm",
+					"-lX11",
+					"-lm",
+					"-lgsl",
+					"-lgslcblas",
+				);
+				PRODUCT_NAME = Dislin;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		34ABEB7C183C3319004ADA87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				OTHER_LDFLAGS = (
+					"-L/Users/Matthew/dislin",
+					"-ldislin",
+					"-L/opt/local/lib",
+					"-L/usr/OpenMotif/lib",
+					"-lXm",
+					"-lX11",
+					"-lm",
+					"-lgsl",
+					"-lgslcblas",
+				);
+				PRODUCT_NAME = Dislin;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		34ABEB7E183C3319004ADA87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = (
+					"-I/opt/local/include/",
+					"-L/opt/local/lib\n",
+					"-lgslcblas",
+					"-lgsl",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		34ABEB7F183C3319004ADA87 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = (
+					"-I/opt/local/include/",
+					"-L/opt/local/lib\n",
+					"-lgslcblas",
+					"-lgsl",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		34423F0A183FC7E900E458F9 /* Build configuration list for PBXNativeTarget "rk4stack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34423F0B183FC7E900E458F9 /* Debug */,
+				34423F0C183FC7E900E458F9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34423F17183FC80900E458F9 /* Build configuration list for PBXNativeTarget "rk4web" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34423F18183FC80900E458F9 /* Debug */,
+				34423F19183FC80900E458F9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34ABEB6F183C3319004ADA87 /* Build configuration list for PBXProject "Final Project" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34ABEB7B183C3319004ADA87 /* Debug */,
+				34ABEB7C183C3319004ADA87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34ABEB7D183C3319004ADA87 /* Build configuration list for PBXNativeTarget "Rk4gsl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34ABEB7E183C3319004ADA87 /* Debug */,
+				34ABEB7F183C3319004ADA87 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 34ABEB6C183C3319004ADA87 /* Project object */;
+}
